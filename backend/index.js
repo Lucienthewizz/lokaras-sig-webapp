@@ -1,40 +1,25 @@
-import express from "express"
-import cors from "cors"
-import dotenv from "dotenv"
-import { supabase } from "./config/supabase.js"
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import placeRoutes from "./routes/placeRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("LOKARAS API is running")
-})
+  res.send("LOKARAS API is running");
+});
 
-app.get("/api/places", async (req, res) => {
-  const { data, error } = await supabase
-    .from("places")
-    .select("*")
-    .order("created_at", { ascending: false })
+app.use("/api/auth", authRoutes);
+app.use("/api/places", placeRoutes);
 
-  if (error) {
-    return res.status(500).json({
-      message: "Gagal mengambil data places",
-      error: error.message,
-    })
-  }
-
-  res.json({
-    message: "Berhasil mengambil data places",
-    data,
-  })
-})
-
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`LOKARAS API running on port ${PORT}`)
-})
+  console.log(`LOKARAS API running on port ${PORT}`);
+});
