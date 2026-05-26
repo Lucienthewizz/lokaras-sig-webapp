@@ -1,12 +1,18 @@
 import { getUserByToken } from "../services/authService.js";
 import { errorResponse } from "../utils/response.js";
+import { HTTP_STATUS } from "../constants/httpStatus.js";
+import { MESSAGE } from "../constants/message.js";
 
 export const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return errorResponse(res, 401, "Token tidak ditemukan");
+      return errorResponse(
+        res,
+        HTTP_STATUS.UNAUTHORIZED,
+        MESSAGE.AUTH.TOKEN_NOT_FOUND,
+      );
     }
 
     const token = authHeader.replace("Bearer ", "");
@@ -17,13 +23,21 @@ export const authMiddleware = async (req, res, next) => {
     } = await getUserByToken(token);
 
     if (error || !user) {
-      return errorResponse(res, 401, "Token tidak valid");
+      return errorResponse(
+        res,
+        HTTP_STATUS.UNAUTHORIZED,
+        MESSAGE.AUTH.TOKEN_INVALID,
+      );
     }
 
     req.user = user;
-
     next();
   } catch (error) {
-    return errorResponse(res, 500, "Internal server error", error.message);
+    return errorResponse(
+      res,
+      HTTP_STATUS.INTERNAL_SERVER_ERROR,
+      MESSAGE.GENERAL.INTERNAL_SERVER_ERROR,
+      error.message,
+    );
   }
 };
