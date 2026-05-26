@@ -11,7 +11,6 @@ const supabaseAuth = createClient(
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const { data, error } = await supabaseAuth.auth.signInWithPassword({
       email,
       password,
