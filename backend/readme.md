@@ -10,8 +10,9 @@ Selamat datang di dokumentasi backend untuk **Lokaras SIG (Sistem Informasi Geog
 ## Prasyarat
 
 Pastikan Anda sudah menginstal alat-alat berikut:
+
 - [Node.js](https://nodejs.org/)
-- [NPM](https://www.npmjs.com/) 
+- [NPM](https://www.npmjs.com/)
 
 ## Instalasi & Persiapan
 
@@ -41,7 +42,7 @@ backend/
 
 ## Menjalankan Server
 
-Untuk menjalankan API Server dalam mode *development* (dilengkapi dengan *live-reload*), gunakan perintah:
+Untuk menjalankan API Server dalam mode _development_ (dilengkapi dengan _live-reload_), gunakan perintah:
 
 ```bash
 npm run dev
@@ -61,4 +62,5 @@ Perintah tambahan yang tersedia untuk menjaga kebersihan kode Anda:
   ```
 
 ---
-*Dikembangkan untuk Lokaras SIG WebApp.*
+
+_Dikembangkan untuk Lokaras SIG WebApp._

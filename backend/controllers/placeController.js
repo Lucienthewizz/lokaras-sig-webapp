@@ -5,6 +5,10 @@ import {
   editPlaceById,
   removePlaceById,
 } from "../services/placeService.js";
+import {
+  createPlacePayload,
+  updatePlacePayload,
+} from "../utils/placePayload.js";
 import { successResponse, errorResponse } from "../utils/response.js";
 import {
   validateCreatePlace,
@@ -23,6 +27,7 @@ export const getPlaces = async (req, res) => {
         res,
         HTTP_STATUS.INTERNAL_SERVER_ERROR,
         MESSAGE.PLACE.FETCH_FAILED,
+        error.message,
       );
     }
 
@@ -92,12 +97,7 @@ export const createPlace = async (req, res) => {
       );
     }
 
-    const payload = {
-      ...req.body,
-      latitude: Number(req.body.latitude),
-      longitude: Number(req.body.longitude),
-      created_by: req.user.id,
-    };
+    const payload = createPlacePayload(req.body, req.user.id);
 
     const { data, error } = await insertPlace(payload);
 
@@ -142,17 +142,7 @@ export const updatePlace = async (req, res) => {
       );
     }
 
-    const payload = {
-      ...req.body,
-    };
-
-    if (req.body.latitude !== undefined) {
-      payload.latitude = Number(req.body.latitude);
-    }
-
-    if (req.body.longitude !== undefined) {
-      payload.longitude = Number(req.body.longitude);
-    }
+    const payload = updatePlacePayload(req.body);
 
     const { data, error } = await editPlaceById(id, payload);
 
