@@ -1,36 +1,29 @@
-import { createClient } from "@supabase/supabase-js";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const supabaseAuth = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_PUBLISHABLE_KEY,
-);
+import { getUserByToken } from "../services/authService.js";
+import { errorResponse } from "../utils/response.js";
 
 export const authMiddleware = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  try {
+    const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    return res.status(401).json({
-      message: "Token tidak ditemukan",
-    });
+    if (!authHeader) {
+      return errorResponse(res, 401, "Token tidak ditemukan");
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+
+    const {
+      data: { user },
+      error,
+    } = await getUserByToken(token);
+
+    if (error || !user) {
+      return errorResponse(res, 401, "Token tidak valid");
+    }
+
+    req.user = user;
+
+    next();
+  } catch (error) {
+    return errorResponse(res, 500, "Internal server error", error.message);
   }
-
-  const token = authHeader.replace("Bearer ", "");
-
-  const {
-    data: { user },
-    error,
-  } = await supabaseAuth.auth.getUser(token);
-
-  if (error || !user) {
-    return res.status(401).json({
-      message: "Token tidak valid",
-    });
-  }
-
-  req.user = user;
-
-  next();
 };
