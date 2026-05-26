@@ -16,6 +16,7 @@ import {
 } from "../validations/placeValidation.js";
 import { HTTP_STATUS } from "../constants/httpStatus.js";
 import { MESSAGE } from "../constants/message.js";
+import { uploadImageToStorage } from "../services/storageService.js";
 
 // Controller untuk get all places
 export const getPlaces = async (req, res) => {
@@ -97,7 +98,30 @@ export const createPlace = async (req, res) => {
       );
     }
 
-    const payload = createPlacePayload(req.body, req.user.id);
+    let imageUrl = req.body.image_url || null;
+
+    if (req.file) {
+      const { imageUrl: uploadedImageUrl, error: uploadError } =
+        await uploadImageToStorage(req.file);
+
+      if (uploadError) {
+        return errorResponse(
+          res,
+          HTTP_STATUS.BAD_REQUEST,
+          MESSAGE.PLACE.UPLOAD_FAILED,
+          uploadError.message,
+        );
+      }
+      imageUrl = uploadedImageUrl;
+    }
+
+    const payload = createPlacePayload(
+      {
+        ...req.body,
+        image_url: imageUrl,
+      },
+      req.user.id,
+    );
 
     const { data, error } = await insertPlace(payload);
 
@@ -142,7 +166,24 @@ export const updatePlace = async (req, res) => {
       );
     }
 
-    const payload = updatePlacePayload(req.body);
+    let imageUrl = req.body.image_url || null;
+
+    if (req.file) {
+      const { imageUrl: uploadedImageUrl, error: uploadError } =
+        await uploadImageToStorage(req.file);
+
+      if (uploadError) {
+        return errorResponse(
+          res,
+          HTTP_STATUS.BAD_REQUEST,
+          MESSAGE.PLACE.UPLOAD_FAILED,
+          uploadError.message,
+        );
+      }
+      imageUrl = uploadedImageUrl;
+    }
+
+    const payload = updatePlacePayload({ ...req.body, image_url: imageUrl });
 
     const { data, error } = await editPlaceById(id, payload);
 

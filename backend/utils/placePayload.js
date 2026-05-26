@@ -1,3 +1,9 @@
+const toBoolean = (value) => {
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return value;
+};
+
 export const createPlacePayload = (body, userId) => {
   return {
     name: body.name,
@@ -12,8 +18,10 @@ export const createPlacePayload = (body, userId) => {
     rating: body.rating !== undefined ? Number(body.rating) : null,
     price_level:
       body.price_level !== undefined ? Number(body.price_level) : null,
-    is_halal: body.is_halal,
-    is_featured: body.is_featured,
+    is_halal:
+      body.is_halal !== undefined ? toBoolean(body.is_halal) : undefined,
+    is_featured:
+      body.is_featured !== undefined ? toBoolean(body.is_featured) : undefined,
     marker_icon: body.marker_icon,
     created_by: userId,
   };
@@ -67,11 +75,11 @@ export const updatePlacePayload = (body) => {
   }
 
   if (body.is_halal !== undefined) {
-    payload.is_halal = body.is_halal;
+    payload.is_halal = toBoolean(body.is_halal);
   }
 
   if (body.is_featured !== undefined) {
-    payload.is_featured = body.is_featured;
+    payload.is_featured = toBoolean(body.is_featured);
   }
 
   if (body.marker_icon !== undefined) {

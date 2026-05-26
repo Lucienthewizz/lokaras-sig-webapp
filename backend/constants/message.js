@@ -17,12 +17,14 @@ export const MESSAGE = {
     CREATE_SUCCESS: "Berhasil menambahkan place",
     UPDATE_SUCCESS: "Berhasil mengupdate place",
     DELETE_SUCCESS: "Berhasil menghapus place",
+    UPLOAD_SUCCESS: "Berhasil mengunggah gambar",
 
     FETCH_FAILED: "Gagal mengambil data places",
     FETCH_BY_ID_FAILED: "Gagal mengambil place berdasarkan id",
     CREATE_FAILED: "Gagal menambahkan place",
     UPDATE_FAILED: "Gagal mengupdate place",
     DELETE_FAILED: "Gagal menghapus place",
+    UPLOAD_FAILED: "Gagal mengunggah gambar",
 
     NOT_FOUND: "Place tidak ditemukan",
   },
