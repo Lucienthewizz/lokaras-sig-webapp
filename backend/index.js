@@ -18,6 +18,13 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/places", placeRoutes);
 
+app.use((req, res) => {
+  return res.status(404).json({
+    success: false,
+    message: "Endpoint tidak ditemukan",
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

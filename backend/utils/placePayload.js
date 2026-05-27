@@ -1,9 +1,6 @@
-const toBoolean = (value) => {
-  if (value === "true") return true;
-  if (value === "false") return false;
-  return value;
-};
+import { toBoolean } from "./formatter.js";
 
+// Utils untuk membuat payload dari body request saat create
 export const createPlacePayload = (body, userId) => {
   return {
     name: body.name,
@@ -18,33 +15,21 @@ export const createPlacePayload = (body, userId) => {
     rating: body.rating !== undefined ? Number(body.rating) : null,
     price_level:
       body.price_level !== undefined ? Number(body.price_level) : null,
-    is_halal:
-      body.is_halal !== undefined ? toBoolean(body.is_halal) : undefined,
-    is_featured:
-      body.is_featured !== undefined ? toBoolean(body.is_featured) : undefined,
+    is_halal: toBoolean(body.is_halal),
+    is_featured: toBoolean(body.is_featured),
     marker_icon: body.marker_icon,
     created_by: userId,
   };
 };
 
+// Utils untuk membuat payload dari body request saat update
 export const updatePlacePayload = (body) => {
   const payload = {};
 
-  if (body.name !== undefined) {
-    payload.name = body.name;
-  }
-
-  if (body.category !== undefined) {
-    payload.category = body.category;
-  }
-
-  if (body.description !== undefined) {
-    payload.description = body.description;
-  }
-
-  if (body.address !== undefined) {
-    payload.address = body.address;
-  }
+  if (body.name !== undefined) payload.name = body.name;
+  if (body.category !== undefined) payload.category = body.category;
+  if (body.description !== undefined) payload.description = body.description;
+  if (body.address !== undefined) payload.address = body.address;
 
   if (body.latitude !== undefined) {
     payload.latitude = Number(body.latitude);
@@ -85,6 +70,8 @@ export const updatePlacePayload = (body) => {
   if (body.marker_icon !== undefined) {
     payload.marker_icon = body.marker_icon;
   }
+
+  payload.updated_at = new Date().toISOString();
 
   return payload;
 };

@@ -166,7 +166,7 @@ export const updatePlace = async (req, res) => {
       );
     }
 
-    let imageUrl = req.body.image_url || null;
+    const payload = updatePlacePayload(req.body);
 
     if (req.file) {
       const { imageUrl: uploadedImageUrl, error: uploadError } =
@@ -180,10 +180,9 @@ export const updatePlace = async (req, res) => {
           uploadError.message,
         );
       }
-      imageUrl = uploadedImageUrl;
-    }
 
-    const payload = updatePlacePayload({ ...req.body, image_url: imageUrl });
+      payload.image_url = uploadedImageUrl;
+    }
 
     const { data, error } = await editPlaceById(id, payload);
 

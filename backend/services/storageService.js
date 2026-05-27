@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "../config/supabase.js";
 
+// Service untuk mengupload gambar ke storage
 export const uploadImageToStorage = async (file, folder = "places") => {
   const fileExt = file.originalname.split(".").pop();
   const fileName = `${folder}/${Date.now()}-${Math.random()
