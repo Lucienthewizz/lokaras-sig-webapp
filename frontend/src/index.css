@@ -3,13 +3,55 @@
 @plugin "daisyui";
 
 :root {
-  --p:#E11D48;
-  --s:#F59E0B;
-  --a:#10B981;
-  --n:#3F3F46;
-  --b1:#F9FAFB;
+  --primary: #e11d48;
+  --secondary: #f59e0b;
+  --accent: #10b981;
+  --neutral: #3f3f46;
+  --base-1: #f9fafb;
 }
 
-html {
-  background:#F9FAFB;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--base-1);
+  color: var(--neutral);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 1.5rem;
+}
+
+.leaflet-popup-content {
+  margin: 14px;
+}
+
+.leaflet-popup-close-button {
+  top: 12px !important;
+  right: 12px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid var(--primary) !important;
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #71717a !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  transition:
+    background 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.leaflet-popup-close-button:hover {
+  background: #fff1f2 !important;
+  color: var(--primary) !important;
+  transform: scale(1.04);
 }
