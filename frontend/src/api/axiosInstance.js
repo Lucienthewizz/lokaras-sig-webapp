@@ -12,7 +12,7 @@ api.interceptors.request.use(
 
     // Jika token ada, tambahkan ke header Authorization
     if (token) {
-      config.header.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
