@@ -1,5 +1,6 @@
 import { Search, X } from "lucide-react";
 
+// Component input pencarian tempat pada sidebar
 const PlaceSearchInput = ({ searchKeyword, onChangeSearch }) => {
   return (
     <div className="mb-3">

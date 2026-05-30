@@ -7,6 +7,17 @@ import {
   deletePlace,
 } from "../api/placeApi";
 
+// fungsi untuk mengambil pesan error API, termasuk detail validasi backend
+const getApiErrorMessage = (error, fallbackMessage) => {
+  const responseData = error.response?.data;
+
+  if (Array.isArray(responseData?.error)) {
+    return responseData.error.join("\n");
+  }
+
+  return responseData?.message || fallbackMessage;
+};
+
 // fungsi untuk mengelola state place, termasuk fetching, creating, updating, dan deleting places
 export const usePlaceStore = create((set, get) => ({
   places: [],
@@ -27,8 +38,10 @@ export const usePlaceStore = create((set, get) => ({
         error: null,
       });
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Gagal mengambil data places";
+      const errorMessage = getApiErrorMessage(
+        error,
+        "Gagal mengambil data places",
+      );
 
       set({
         loading: false,
@@ -50,8 +63,10 @@ export const usePlaceStore = create((set, get) => ({
         error: null,
       });
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Gagal mengambil places by id";
+      const errorMessage = getApiErrorMessage(
+        error,
+        "Gagal mengambil places by id",
+      );
 
       set({
         loading: false,
@@ -86,8 +101,7 @@ export const usePlaceStore = create((set, get) => ({
         message: response.message,
       };
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Gagal menambahkan place";
+      const errorMessage = getApiErrorMessage(error, "Gagal menambahkan place");
 
       set({
         loading: false,
@@ -110,18 +124,19 @@ export const usePlaceStore = create((set, get) => ({
 
       await get().fetchPlaces();
 
-      set({
+      set((state) => ({
+        selectedPlace:
+          state.selectedPlace?.id === id ? response.data : state.selectedPlace,
         loading: false,
         error: null,
-      });
+      }));
 
       return {
         success: true,
         message: response.message,
       };
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Gagal mengupdate place";
+      const errorMessage = getApiErrorMessage(error, "Gagal mengupdate place");
 
       set({
         loading: false,
@@ -154,8 +169,7 @@ export const usePlaceStore = create((set, get) => ({
         message: response.message,
       };
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Gagal menghapus place";
+      const errorMessage = getApiErrorMessage(error, "Gagal menghapus place");
 
       set({
         loading: false,

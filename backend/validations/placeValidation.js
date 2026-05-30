@@ -231,12 +231,17 @@ export const validateUpdatePlace = (body) => {
     }
   }
 
+  // Validasi boolean-like
+  const isBooleanLike = (value) => {
+    return typeof value === "boolean" || value === "true" || value === "false";
+  };
+
   // Validasi untuk update is_halal
-  if (is_halal !== undefined && typeof is_halal !== "boolean") {
+  if (is_halal !== undefined && !isBooleanLike(is_halal)) {
     errors.push("Is halal harus bernilai true atau false");
   }
   // Validasi untuk update is_featured
-  if (is_featured !== undefined && typeof is_featured !== "boolean") {
+  if (is_featured !== undefined && !isBooleanLike(is_featured)) {
     errors.push("Is featured harus bernilai true atau false");
   }
 

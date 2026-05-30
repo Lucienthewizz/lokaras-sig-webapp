@@ -1,25 +1,8 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import Swal from "sweetalert2";
-
 import { usePlaceStore } from "../../../store/usePlaceStore";
 import { placeCategories } from "../constants/placeCategories";
-
-const initialForm = {
-  name: "",
-  category: "restaurant",
-  description: "",
-  address: "",
-  latitude: "",
-  longitude: "",
-  opening_hours: "",
-  phone: "",
-  rating: "",
-  price_level: "",
-  is_halal: false,
-  is_featured: false,
-  marker_icon: "",
-};
 
 const categories = placeCategories.filter(
   (category) => category.label !== "Semua",
@@ -31,25 +14,44 @@ const inputClass =
 // Component kecil untuk membungkus label dan input form
 const Field = ({ label, children, className = "" }) => (
   <div className={className}>
-    <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+    <label className="mb-1.5 block text-sm font-medium text-(--neutral)">
       {label}
     </label>
     {children}
   </div>
 );
 
-// Component modal untuk menambahkan data tempat baru
-const AddPlaceModal = ({ isOpen, onClose }) => {
-  const [form, setForm] = useState(initialForm);
+// fungsi untuk mengubah data place menjadi nilai awal form edit
+const buildInitialForm = (place) => {
+  return {
+    name: place?.name || "",
+    category: place?.category || "restaurant",
+    description: place?.description || "",
+    address: place?.address || "",
+    latitude: place?.latitude || "",
+    longitude: place?.longitude || "",
+    opening_hours: place?.opening_hours || "",
+    phone: place?.phone || "",
+    rating: place?.rating || "",
+    price_level: place?.price_level || "",
+    is_halal: Boolean(place?.is_halal),
+    is_featured: Boolean(place?.is_featured),
+    marker_icon: place?.marker_icon || "",
+  };
+};
+
+// Component modal untuk mengedit data tempat yang sudah ada
+const EditPlaceModal = ({ isOpen, place, onClose }) => {
+  const [form, setForm] = useState(buildInitialForm(place));
   const [image, setImage] = useState(null);
 
-  const { addPlace, loading } = usePlaceStore();
+  const { editPlace, loading } = usePlaceStore();
 
-  if (!isOpen) {
+  if (!isOpen || !place) {
     return null;
   }
 
-  // fungsi untuk menangani perubahan input form
+  // fungsi untuk menangani perubahan input form edit
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
 
@@ -59,29 +61,23 @@ const AddPlaceModal = ({ isOpen, onClose }) => {
     }));
   };
 
-  // fungsi untuk menyimpan file gambar yang dipilih
+  // fungsi untuk menyimpan file gambar baru jika dipilih
   const handleImageChange = (event) => {
     const file = event.target.files?.[0];
     setImage(file || null);
   };
 
-  // fungsi untuk mengembalikan form ke kondisi awal
-  const resetForm = () => {
-    setForm(initialForm);
-    setImage(null);
-  };
-
-  // fungsi untuk menutup modal dan reset form
+  // fungsi untuk menutup modal edit
   const handleClose = () => {
     if (loading) {
       return;
     }
 
-    resetForm();
+    setImage(null);
     onClose();
   };
 
-  // fungsi untuk mengirim data tempat baru ke backend
+  // fungsi untuk mengirim perubahan data tempat ke backend
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -114,39 +110,37 @@ const AddPlaceModal = ({ isOpen, onClose }) => {
       formData.append("image", image);
     }
 
-    const result = await addPlace(formData);
+    const result = await editPlace(place.id, formData);
 
     if (result.success) {
+      onClose();
+
       await Swal.fire({
         icon: "success",
         title: "Berhasil",
-        text: result.message || "Tempat berhasil ditambahkan",
+        text: result.message || "Tempat berhasil diperbarui",
         confirmButtonColor: "#e11d48",
       });
 
-      resetForm();
-      onClose();
       return;
     }
 
     Swal.fire({
       icon: "error",
       title: "Gagal",
-      text: result.message || "Tempat gagal ditambahkan",
+      text: result.message || "Tempat gagal diperbarui",
       confirmButtonColor: "#e11d48",
     });
   };
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/40 px-4 py-6 backdrop-blur-sm">
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
+      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-4xl bg-white shadow-2xl">
         <div className="flex items-start justify-between gap-4 border-b border-zinc-100 px-5 py-4">
           <div>
-            <h2 className="text-lg font-bold text-(--neutral)">
-              Tambah Marker Baru
-            </h2>
+            <h2 className="text-xl font-bold text-(--neutral)">Edit Tempat</h2>
             <p className="mt-1 text-sm text-zinc-500">
-              Isi data tempat kuliner yang akan ditampilkan di peta.
+              Perbarui data tempat kuliner di peta LOKARAS.
             </p>
           </div>
 
@@ -154,15 +148,14 @@ const AddPlaceModal = ({ isOpen, onClose }) => {
             type="button"
             onClick={handleClose}
             disabled={loading}
-            aria-label="Tutup modal tambah marker"
-            className="rounded-xl p-2 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <X className="h-5 w-5" />
+            <X size={18} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="overflow-y-auto">
-          <div className="space-y-5 px-5 py-5">
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-5">
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Nama Tempat">
                 <input
@@ -299,15 +292,30 @@ const AddPlaceModal = ({ isOpen, onClose }) => {
             </div>
 
             <Field label="Gambar Tempat">
+              {place.image_url && (
+                <div className="mb-3 h-36 overflow-hidden rounded-2xl bg-zinc-100">
+                  <img
+                    src={place.image_url}
+                    alt={place.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              )}
+
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 className="w-full rounded-xl border border-zinc-200 bg-white px-3.5 py-2.5 text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-zinc-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-zinc-600 hover:file:bg-zinc-200"
               />
+
+              <p className="mt-1.5 text-xs text-zinc-500">
+                Kosongkan jika tidak ingin mengganti gambar.
+              </p>
+
               {image && (
                 <p className="mt-1.5 truncate text-xs text-zinc-500">
-                  File dipilih: {image.name}
+                  File baru dipilih: {image.name}
                 </p>
               )}
             </Field>
@@ -352,7 +360,7 @@ const AddPlaceModal = ({ isOpen, onClose }) => {
               disabled={loading}
               className="rounded-xl bg-(--primary) px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Menyimpan..." : "Simpan Tempat"}
+              {loading ? "Menyimpan..." : "Simpan Perubahan"}
             </button>
           </div>
         </form>
@@ -361,4 +369,4 @@ const AddPlaceModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default AddPlaceModal;
+export default EditPlaceModal;

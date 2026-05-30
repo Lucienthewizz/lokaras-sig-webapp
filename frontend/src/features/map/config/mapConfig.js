@@ -2,6 +2,7 @@ import L from "leaflet";
 
 export const defaultCenter = [-8.7906, 115.1785];
 
+// fungsi untuk membuat icon marker Leaflet berdasarkan status aktif
 export const createMarkerIcon = (isActive = false) => {
   const size = isActive ? 34 : 30;
   const fontSize = isActive ? 15 : 13;
@@ -31,6 +32,7 @@ export const createMarkerIcon = (isActive = false) => {
   });
 };
 
+// fungsi untuk membuat icon cluster marker pada Leaflet
 export const createClusterIcon = (cluster) => {
   const count = cluster.getChildCount();
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Check, ChevronDown, SlidersHorizontal } from "lucide-react";
 
+// Component dropdown untuk memilih filter kategori tempat
 const CategoryFilterDropdown = ({
   categories,
   selectedCategory,
@@ -13,6 +14,7 @@ const CategoryFilterDropdown = ({
     categories[0];
   const ActiveCategoryIcon = activeCategory.icon;
 
+  // fungsi untuk memilih kategori dan menutup dropdown
   const handleSelectCategory = (category) => {
     onChangeCategory(category.label);
     setIsOpen(false);

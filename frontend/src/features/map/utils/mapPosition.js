@@ -1,3 +1,4 @@
+// fungsi untuk menghitung titik tengah map agar popup marker tetap terlihat nyaman
 export const getPopupAwareCenter = (
   map,
   position,

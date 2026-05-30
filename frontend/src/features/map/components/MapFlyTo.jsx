@@ -5,6 +5,7 @@ import { getPopupAwareCenter } from "../utils/mapPosition";
 
 const selectedPlaceZoom = 16;
 
+// Component helper untuk memindahkan posisi map ke marker yang dipilih
 const MapFlyTo = ({ selectedPlace }) => {
   const map = useMap();
 

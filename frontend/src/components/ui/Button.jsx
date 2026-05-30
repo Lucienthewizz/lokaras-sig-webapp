@@ -10,6 +10,7 @@ const sizes = {
   md: "px-4 py-2.5 text-sm",
 };
 
+// Component reusable untuk tombol dengan variant dan ukuran berbeda
 const Button = ({
   children,
   type = "button",

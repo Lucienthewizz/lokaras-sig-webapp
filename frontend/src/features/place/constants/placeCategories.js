@@ -15,6 +15,7 @@ export const placeCategories = [
   { label: "ice_cream_shop", displayLabel: "Ice Cream Shop", icon: CakeSlice },
 ];
 
+// fungsi untuk mengubah value kategori menjadi label yang rapi untuk UI
 export const getPlaceCategoryLabel = (categoryValue) => {
   return (
     placeCategories.find((category) => category.label === categoryValue)

@@ -7,6 +7,7 @@ import PlaceSearchInput from "./components/PlaceSearchInput";
 import PlaceSidebarHeader from "./components/PlaceSidebarHeader";
 import { placeCategories } from "./constants/placeCategories";
 
+// Component sidebar utama untuk search, filter, list tempat, dan tombol tambah marker
 const PlaceSidebar = ({
   places,
   categoryCountPlaces = places,

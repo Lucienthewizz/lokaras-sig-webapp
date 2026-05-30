@@ -5,11 +5,14 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import PlacePopup from "./PlacePopup";
 import { createClusterIcon, createMarkerIcon } from "../config/mapConfig";
 
+// Component layer marker dan cluster untuk semua tempat pada map
 const PlacesMarkerLayer = ({
   places,
   selectedPlace,
   isAuthenticated,
   onSelectPlace,
+  onDeletePlace,
+  onEditPlace,
 }) => {
   const markerRefs = useRef({});
 
@@ -55,7 +58,12 @@ const PlacesMarkerLayer = ({
             }}
           >
             <Popup autoPan={false}>
-              <PlacePopup place={place} isAuthenticated={isAuthenticated} />
+              <PlacePopup
+                place={place}
+                isAuthenticated={isAuthenticated}
+                onDeletePlace={onDeletePlace}
+                onEditPlace={onEditPlace}
+              />
             </Popup>
           </Marker>
         );

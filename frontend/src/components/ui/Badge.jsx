@@ -5,6 +5,7 @@ const variants = {
   neutral: "bg-zinc-100 text-zinc-500",
 };
 
+// Component reusable untuk label kecil seperti kategori, halal, dan featured
 const Badge = ({ children, variant = "neutral", className = "" }) => {
   return (
     <span

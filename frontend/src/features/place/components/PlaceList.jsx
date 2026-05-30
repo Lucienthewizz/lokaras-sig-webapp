@@ -3,6 +3,7 @@ import { SearchX } from "lucide-react";
 import { EmptyState } from "../../../components/ui";
 import PlaceCard from "./PlaceCard";
 
+// Component list tempat pada sidebar
 const PlaceList = ({ places, selectedPlace, onSelectPlace }) => {
   return (
     <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">

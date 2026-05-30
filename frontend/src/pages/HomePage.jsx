@@ -5,14 +5,18 @@ import { PlaceSidebar } from "../features/place";
 import { useAuthStore } from "../store/useAuthStore";
 import { usePlaceStore } from "../store/usePlaceStore";
 import AddPlaceModal from "../features/place/components/AddPlaceModal";
+import EditPlaceModal from "../features/place/components/EditPlaceModal";
 import { getPlaceCategoryLabel } from "../features/place/constants/placeCategories";
+import Swal from "sweetalert2";
 
+// Halaman utama yang mengatur sidebar, map, table, dan modal CRUD tempat
 const HomePage = () => {
   const [activeView, setActiveView] = useState("map");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingPlace, setEditingPlace] = useState(null);
 
   const { isAuthenticated } = useAuthStore();
 
@@ -23,6 +27,7 @@ const HomePage = () => {
     error,
     fetchPlaces,
     setSelectedPlace,
+    removePlace,
   } = usePlaceStore();
 
   useEffect(() => {
@@ -70,6 +75,60 @@ const HomePage = () => {
 
   const effectiveActiveView = isAuthenticated ? activeView : "map";
 
+  // fungsi untuk konfirmasi dan menghapus tempat
+  const handleDeletePlace = async (place) => {
+    const resultConfirm = await Swal.fire({
+      icon: "warning",
+      title: "Hapus Tempat?",
+      text: `Data "${place.name}" akan dihapus dari peta.`,
+      showCancelButton: true,
+      confirmButtonText: "Ya, hapus",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#71717a",
+    });
+
+    if (!resultConfirm.isConfirmed) {
+      return;
+    }
+
+    if (!place?.id) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "ID tempat tidak ditemukan.",
+        confirmButtonColor: "#e11d48",
+      });
+      return;
+    }
+
+    const result = await removePlace(place.id);
+
+    if (result.success) {
+      await Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: result.message || "Tempat berhasil dihapus.",
+        confirmButtonColor: "#e11d48",
+      });
+
+      setSelectedPlace(null);
+      return;
+    }
+
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: result.message || "Terjadi kesalahan saat menghapus tempat.",
+      confirmButtonColor: "#e11d48",
+    });
+  };
+
+  // fungsi untuk membuka modal edit dengan data tempat terpilih
+  const handleOpenEditModal = (place) => {
+    setEditingPlace(place);
+  };
+
   return (
     <MainLayout
       isSidebarOpen={isSidebarOpen}
@@ -110,12 +169,23 @@ const HomePage = () => {
         isAuthenticated={isAuthenticated}
         onChangeView={setActiveView}
         onSelectPlace={setSelectedPlace}
+        onDeletePlace={handleDeletePlace}
+        onEditPlace={handleOpenEditModal}
       />
 
       {isAuthenticated && (
         <AddPlaceModal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
+        />
+      )}
+
+      {isAuthenticated && editingPlace && (
+        <EditPlaceModal
+          key={editingPlace.id}
+          isOpen={true}
+          place={editingPlace}
+          onClose={() => setEditingPlace(null)}
         />
       )}
     </MainLayout>

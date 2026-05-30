@@ -3,6 +3,7 @@ const viewOptions = [
   { value: "table", label: "Tabel" },
 ];
 
+// Component switcher untuk mengganti view map dan table pada mode admin
 const MapViewSwitcher = ({ activeView, onChangeView }) => {
   return (
     <div className="absolute left-1/2 top-6 z-500 flex -translate-x-1/2 rounded-full border border-zinc-200 bg-white/90 p-1 shadow-sm backdrop-blur-xl">

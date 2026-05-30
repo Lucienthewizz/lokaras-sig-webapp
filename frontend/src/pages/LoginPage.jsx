@@ -13,7 +13,7 @@ const LoginPage = () => {
     password: "",
   });
 
-  // handle change untuk input email dan password
+  // fungsi untuk menangani perubahan input email dan password
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -23,7 +23,7 @@ const LoginPage = () => {
     }));
   };
 
-  // handle submit untuk form login
+  // fungsi untuk mengirim form login ke auth store
   const handleSubmit = async (e) => {
     e.preventDefault();
 

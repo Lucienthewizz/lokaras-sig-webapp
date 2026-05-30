@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useAuthStore } from "../../../store/useAuthStore";
 
+// Component indikator status login admin/guest di atas map
 const MapAuthStatus = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
 

@@ -2,11 +2,13 @@ import { create } from "zustand";
 import { loginUser } from "../api/authApi";
 
 // fungsi untuk mendapatkan token dari localStorage
+// fungsi untuk mengambil token login dari localStorage
 const getStoredToken = () => {
   return localStorage.getItem("lokaras_token");
 };
 
 // fungsi untuk mendapatkan user dari localStorage
+// fungsi untuk mengambil data user dari localStorage
 const getStoredUser = () => {
   const user = localStorage.getItem("lokaras_user");
   return user ? JSON.parse(user) : null;

@@ -4,12 +4,15 @@ import MapControls from "./MapControls";
 import MapFlyTo from "./MapFlyTo";
 import PlacesMarkerLayer from "./PlacesMarkerLayer";
 
+// Component pembungkus Leaflet MapContainer dan layer marker
 const MapCanvas = ({
   mapCenter,
   places,
   selectedPlace,
   isAuthenticated,
   onSelectPlace,
+  onDeletePlace,
+  onEditPlace,
 }) => {
   return (
     <div className="h-screen w-full">
@@ -32,6 +35,8 @@ const MapCanvas = ({
           selectedPlace={selectedPlace}
           isAuthenticated={isAuthenticated}
           onSelectPlace={onSelectPlace}
+          onDeletePlace={onDeletePlace}
+          onEditPlace={onEditPlace}
         />
       </MapContainer>
     </div>

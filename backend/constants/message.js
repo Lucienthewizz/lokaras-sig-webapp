@@ -9,6 +9,7 @@ export const MESSAGE = {
     LOGIN_FAILED: "Login gagal",
     TOKEN_NOT_FOUND: "Token tidak ditemukan",
     TOKEN_INVALID: "Token tidak valid",
+    TOKEN_EXPIRED: "Sesi login sudah berakhir. Silakan login kembali",
   },
 
   PLACE: {

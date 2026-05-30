@@ -23,10 +23,14 @@ export const authMiddleware = async (req, res, next) => {
     } = await getUserByToken(token);
 
     if (error || !user) {
+      const isTokenExpired = error?.message?.toLowerCase().includes("expired");
+
       return errorResponse(
         res,
         HTTP_STATUS.UNAUTHORIZED,
-        MESSAGE.AUTH.TOKEN_INVALID,
+        isTokenExpired
+          ? MESSAGE.AUTH.TOKEN_EXPIRED
+          : MESSAGE.AUTH.TOKEN_INVALID,
       );
     }
 

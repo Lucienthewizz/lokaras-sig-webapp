@@ -2,6 +2,7 @@ import { BadgeCheck, ImageOff, Star } from "lucide-react";
 
 import { getPlaceCategoryLabel } from "../constants/placeCategories";
 
+// Component kartu tempat pada sidebar list
 const PlaceCard = ({ place, isActive, onSelectPlace }) => {
   return (
     <button

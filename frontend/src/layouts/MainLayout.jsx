@@ -1,5 +1,6 @@
 import { PanelLeftOpen } from "lucide-react";
 
+// Layout utama untuk membungkus sidebar dan konten halaman
 const MainLayout = ({ sidebar, children, isSidebarOpen, onToggleSidebar }) => {
   return (
     <main className="min-h-screen bg-(--base-1) text-(--neutral)">

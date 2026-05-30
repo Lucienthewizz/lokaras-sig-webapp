@@ -12,6 +12,7 @@ import {
 import { Badge, Button } from "../../../components/ui";
 import { getPlaceCategoryLabel } from "../../place/constants/placeCategories";
 
+// Component kecil untuk baris informasi pada popup marker
 const InfoRow = ({ icon, children }) => {
   return (
     <div className="flex min-w-0 items-start gap-1.5 text-xs leading-snug text-zinc-500">
@@ -21,7 +22,8 @@ const InfoRow = ({ icon, children }) => {
   );
 };
 
-const PlacePopup = ({ place, isAuthenticated }) => {
+// Component popup marker untuk menampilkan detail tempat dan aksi admin
+const PlacePopup = ({ place, isAuthenticated, onDeletePlace, onEditPlace }) => {
   const description = place.description || "Detail tempat belum tersedia.";
 
   return (
@@ -89,12 +91,22 @@ const PlacePopup = ({ place, isAuthenticated }) => {
 
         {isAuthenticated && (
           <div className="mt-2.5 flex gap-2">
-            <Button variant="secondary" size="sm" className="flex-1 py-1.5">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => onEditPlace(place)}
+              className="flex-1 py-1.5"
+            >
               <Pencil className="h-3.5 w-3.5" />
               Edit
             </Button>
 
-            <Button variant="danger" size="sm" className="flex-1 py-1.5">
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => onDeletePlace(place)}
+              className="flex-1 py-1.5"
+            >
               <Trash2 className="h-3.5 w-3.5" />
               Hapus
             </Button>
