@@ -1,5 +1,7 @@
 import { BadgeCheck, ImageOff, Star } from "lucide-react";
 
+import { getPlaceCategoryLabel } from "../constants/placeCategories";
+
 const PlaceCard = ({ place, isActive, onSelectPlace }) => {
   return (
     <button
@@ -46,7 +48,7 @@ const PlaceCard = ({ place, isActive, onSelectPlace }) => {
 
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             <span className="rounded-full bg-rose-50 px-2 py-0.5 text-[11px] font-medium text-(--primary)">
-              {place.category || "Kuliner"}
+              {getPlaceCategoryLabel(place.category)}
             </span>
 
             {place.is_halal && (

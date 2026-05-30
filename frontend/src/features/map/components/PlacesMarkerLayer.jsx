@@ -54,7 +54,7 @@ const PlacesMarkerLayer = ({
               click: () => onSelectPlace(place),
             }}
           >
-            <Popup>
+            <Popup autoPan={false}>
               <PlacePopup place={place} isAuthenticated={isAuthenticated} />
             </Popup>
           </Marker>

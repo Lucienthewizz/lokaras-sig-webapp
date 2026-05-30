@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { Badge, Button } from "../../../components/ui";
+import { getPlaceCategoryLabel } from "../../place/constants/placeCategories";
 
 const InfoRow = ({ icon, children }) => {
   return (
@@ -47,7 +48,9 @@ const PlacePopup = ({ place, isAuthenticated }) => {
             </h3>
 
             <div className="mt-1 flex flex-wrap items-center gap-1.5">
-              <Badge variant="primary">{place.category || "Kuliner"}</Badge>
+              <Badge variant="primary">
+                {getPlaceCategoryLabel(place.category)}
+              </Badge>
 
               {place.is_halal && (
                 <Badge variant="success">

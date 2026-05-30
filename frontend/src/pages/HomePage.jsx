@@ -4,12 +4,15 @@ import { MapView } from "../features/map";
 import { PlaceSidebar } from "../features/place";
 import { useAuthStore } from "../store/useAuthStore";
 import { usePlaceStore } from "../store/usePlaceStore";
+import AddPlaceModal from "../features/place/components/AddPlaceModal";
+import { getPlaceCategoryLabel } from "../features/place/constants/placeCategories";
 
 const HomePage = () => {
   const [activeView, setActiveView] = useState("map");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const { isAuthenticated } = useAuthStore();
 
@@ -26,27 +29,46 @@ const HomePage = () => {
     fetchPlaces();
   }, [fetchPlaces]);
 
-  const filteredPlaces = useMemo(() => {
+  const searchFilteredPlaces = useMemo(() => {
+    const keyword = searchKeyword.trim().toLowerCase();
+
+    if (!keyword) {
+      return places;
+    }
+
     return places.filter((place) => {
-      const matchCategory =
-        selectedCategory === "Semua" || place.category === selectedCategory;
+      const categoryLabel = getPlaceCategoryLabel(place.category).toLowerCase();
 
-      const keyword = searchKeyword.toLowerCase();
-
-      const matchSearch =
+      return (
         place.name?.toLowerCase().includes(keyword) ||
         place.address?.toLowerCase().includes(keyword) ||
-        place.category?.toLowerCase().includes(keyword);
-
-      return matchCategory && matchSearch;
+        place.category?.toLowerCase().includes(keyword) ||
+        categoryLabel.includes(keyword)
+      );
     });
-  }, [places, selectedCategory, searchKeyword]);
+  }, [places, searchKeyword]);
+
+  const filteredPlaces = useMemo(() => {
+    if (selectedCategory === "Semua") {
+      return searchFilteredPlaces;
+    }
+
+    return searchFilteredPlaces.filter(
+      (place) => place.category === selectedCategory,
+    );
+  }, [searchFilteredPlaces, selectedCategory]);
 
   useEffect(() => {
-    if (!selectedPlace && filteredPlaces.length > 0) {
-      setSelectedPlace(filteredPlaces[0]);
+    const isSelectedPlaceVisible = filteredPlaces.some(
+      (place) => place.id === selectedPlace?.id,
+    );
+
+    if (!isSelectedPlaceVisible) {
+      setSelectedPlace(filteredPlaces[0] || null);
     }
   }, [filteredPlaces, selectedPlace, setSelectedPlace]);
+
+  const effectiveActiveView = isAuthenticated ? activeView : "map";
 
   return (
     <MainLayout
@@ -55,6 +77,7 @@ const HomePage = () => {
       sidebar={
         <PlaceSidebar
           places={filteredPlaces}
+          categoryCountPlaces={searchFilteredPlaces}
           selectedPlace={selectedPlace}
           selectedCategory={selectedCategory}
           searchKeyword={searchKeyword}
@@ -64,6 +87,7 @@ const HomePage = () => {
           onChangeSearch={setSearchKeyword}
           isOpen={isSidebarOpen}
           onToggleSidebar={() => setIsSidebarOpen((isOpen) => !isOpen)}
+          onOpenAddModal={() => setIsAddModalOpen(true)}
         />
       }
     >
@@ -82,11 +106,18 @@ const HomePage = () => {
       <MapView
         places={filteredPlaces}
         selectedPlace={selectedPlace}
-        activeView={activeView}
+        activeView={effectiveActiveView}
         isAuthenticated={isAuthenticated}
         onChangeView={setActiveView}
         onSelectPlace={setSelectedPlace}
       />
+
+      {isAuthenticated && (
+        <AddPlaceModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+        />
+      )}
     </MainLayout>
   );
 };

@@ -15,7 +15,7 @@ const PlaceSidebarHeader = ({ onToggleSidebar }) => {
       <div className="pointer-events-none absolute inset-y-0 right-0 w-50 bg-linear-to-l from-transparent via-white/60 to-white" />
 
       <div className="relative z-10 flex items-center gap-4">
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden">
+        <div className="flex h-17 w-14 shrink-0 items-center justify-center overflow-hidden">
           <img
             src={logo}
             alt="LOKARAS Logo"
@@ -23,7 +23,7 @@ const PlaceSidebarHeader = ({ onToggleSidebar }) => {
           />
         </div>
 
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 pt-0.5">
           <h1 className="text-[22px] font-bold leading-tight tracking-tight text-(--neutral)">
             LOKARAS
           </h1>

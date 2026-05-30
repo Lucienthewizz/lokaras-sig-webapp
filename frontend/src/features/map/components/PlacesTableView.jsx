@@ -1,6 +1,7 @@
 import { Clock, MapPin, Phone } from "lucide-react";
 
 import { Badge } from "../../../components/ui";
+import { getPlaceCategoryLabel } from "../../place/constants/placeCategories";
 
 const tableColumns = ["Tempat", "Kategori", "Koordinat", "Rating", "Status"];
 
@@ -90,7 +91,7 @@ const PlacesTableView = ({ places }) => {
 
                 <td className="px-5 py-4">
                   <p className="font-medium text-zinc-600">
-                    {place.category || "-"}
+                    {getPlaceCategoryLabel(place.category)}
                   </p>
                   <p className="mt-1 text-xs text-zinc-400">
                     Level harga: {formatPriceLevel(place.price_level)}

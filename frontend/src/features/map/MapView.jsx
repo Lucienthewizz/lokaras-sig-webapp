@@ -1,3 +1,4 @@
+import MapAuthStatus from "./components/MapAuthStatus";
 import MapCanvas from "./components/MapCanvas";
 import MapEmptyState from "./components/MapEmptyState";
 import MapViewSwitcher from "./components/MapViewSwitcher";
@@ -33,11 +34,16 @@ const MapView = ({
     return place.latitude && place.longitude;
   });
   const mapCenter = getInitialMapCenter(selectedPlace, validPlaces);
-  const isMapView = activeView === "map";
+  const isAdminView = isAuthenticated;
+  const isMapView = !isAdminView || activeView === "map";
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-(--base-1)">
-      <MapViewSwitcher activeView={activeView} onChangeView={onChangeView} />
+      <MapAuthStatus />
+
+      {isAdminView && (
+        <MapViewSwitcher activeView={activeView} onChangeView={onChangeView} />
+      )}
 
       {isMapView ? (
         <MapCanvas

@@ -9,6 +9,7 @@ import { placeCategories } from "./constants/placeCategories";
 
 const PlaceSidebar = ({
   places,
+  categoryCountPlaces = places,
   selectedPlace,
   selectedCategory,
   searchKeyword,
@@ -18,18 +19,19 @@ const PlaceSidebar = ({
   onChangeSearch,
   isOpen = true,
   onToggleSidebar,
+  onOpenAddModal,
 }) => {
   const categoryCounts = placeCategories.reduce((counts, category) => {
     if (category.label === "Semua") {
       return {
         ...counts,
-        [category.label]: places.length,
+        [category.label]: categoryCountPlaces.length,
       };
     }
 
     return {
       ...counts,
-      [category.label]: places.filter(
+      [category.label]: categoryCountPlaces.filter(
         (place) => place.category === category.label,
       ).length,
     };
@@ -68,6 +70,7 @@ const PlaceSidebar = ({
           <div className="mt-5 border-t border-zinc-200 pt-5">
             <button
               type="button"
+              onClick={onOpenAddModal}
               className="flex w-full items-center justify-center gap-2 rounded-2xl bg-(--primary) px-4 py-3 text-sm font-bold text-white shadow-sm shadow-rose-200 transition hover:opacity-90"
             >
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20">

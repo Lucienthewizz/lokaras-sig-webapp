@@ -38,7 +38,9 @@ const CategoryFilterDropdown = ({
             </span>
             <span className="mt-0.5 flex items-center gap-2 font-semibold text-(--neutral)">
               <ActiveCategoryIcon className="h-4 w-4 shrink-0 text-(--primary)" />
-              <span className="truncate">{activeCategory.label}</span>
+              <span className="truncate">
+                {activeCategory.displayLabel || activeCategory.label}
+              </span>
             </span>
           </span>
         </span>
@@ -73,7 +75,7 @@ const CategoryFilterDropdown = ({
                   <CategoryIcon className="h-4 w-4 shrink-0" />
 
                   <span className="min-w-0 flex-1 truncate font-medium">
-                    {category.label}
+                    {category.displayLabel || category.label}
                   </span>
 
                   <span
