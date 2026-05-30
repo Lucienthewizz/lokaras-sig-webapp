@@ -52,7 +52,7 @@ const PlacesMarkerLayer = ({
               }
             }}
             position={[Number(place.latitude), Number(place.longitude)]}
-            icon={createMarkerIcon(isActive)}
+            icon={createMarkerIcon(place.category, isActive)}
             eventHandlers={{
               click: () => onSelectPlace(place),
             }}
