@@ -65,10 +65,10 @@ const LoginPage = () => {
             <img
               src={logo}
               alt="LOKARAS Logo"
-              className="mx-auto h-full w-35 object-cover object-center"
+              className="mx-auto h-full w-30 object-cover object-center"
             />
 
-            <div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-(--primary)">
+            <div className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-(--primary)">
               <ShieldCheck className="h-3.5 w-3.5" />
               Admin Access
             </div>
